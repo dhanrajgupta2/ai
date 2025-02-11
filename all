@@ -1,0 +1,233 @@
+Exp 1 : Implement depth first search algorithm and breadth first search algorithm,use an undirected graph and develop a recursive algorithm for searching all the vertices of a graph or tree data structure
+
+sol:
+
+graph = {
+    "5": ["3", "7"],
+    "3": ["2", "4"],
+    "7": ["8"],
+    "2": [],
+    "4": ["8"],
+    "8": []
+}
+
+# DFS Algorithm
+def DFS(graph, node):
+    stack = [node]
+    visited = []
+
+    print("\nOrder of visited nodes by DFS: ", end=" ")
+
+    while stack:
+        s = stack.pop()
+
+        if s not in visited:
+            visited.append(s)
+            print(s, end=" ")
+
+        for neighbour in graph[s]:
+            if neighbour not in visited:
+                stack.append(neighbour)
+
+# BFS Algorithm
+def BFS(graph, node):
+    queue = [node]
+    visited = [node]
+
+    print("\nOrder of visited nodes by BFS: ", end=" ")
+
+    while queue:
+        m = queue.pop(0)
+        print(m, end=" ")
+
+        for neighbour in graph[m]:
+            if neighbour not in visited:
+                queue.append(neighbour)
+                visited.append(neighbour)
+
+# Run BFS and DFS starting from node "5"
+BFS(graph, "5")
+DFS(graph, "5")
+
+<===========================================================================================================================================================================================================================================================================================================>
+
+exp 2 implement A star algorithm for any game search algorithm
+
+sol:
+
+import heapq
+
+def astaralgo(start_node, stop_node):
+    # Priority queue for open set
+    open_set = []
+    heapq.heappush(open_set, (0, start_node))
+    
+    # Closed set
+    closed_set = set()
+    
+    # Cost from start to each node
+    g = {start_node: 0}
+    
+    # Parent dictionary to reconstruct the path
+    parents = {start_node: None}
+    
+    while open_set:
+        # Get the node with the lowest f(n) = g(n) + h(n)
+        _, n = heapq.heappop(open_set)
+        
+        # If stop node is reached, construct the path
+        if n == stop_node:
+            path = []
+            while n is not None:
+                path.append(n)
+                n = parents[n]
+            path.reverse()
+            print("Path found: {}".format(path))
+            return path
+        
+        # Add n to the closed set
+        closed_set.add(n)
+        
+        # Process each neighbor of n
+        for (m, weight) in get_neighbors(n):
+            if m in closed_set:
+                continue
+            
+            # Calculate tentative g score
+            tentative_g = g[n] + weight
+            
+            if m not in g or tentative_g < g[m]:
+                # Update g and parent
+                g[m] = tentative_g
+                parents[m] = n
+                
+                # Add to open set with priority f(m) = g(m) + h(m)
+                heapq.heappush(open_set, (g[m] + heuristic(m), m))
+    
+    print("Path does not exist!")
+    return None
+
+def get_neighbors(v):
+    return Graph_nodes.get(v, [])
+
+def heuristic(n):
+    H_dist = {
+        'A': 11,
+        'B': 6,
+        'C': 99,
+        'D': 1,
+        'E': 7,
+        'G': 0,
+    }
+    return H_dist.get(n, float('inf'))
+
+Graph_nodes = {
+    'A': [('B', 2), ('E', 3)],
+    'B': [('C', 1), ('G', 9)],
+    'C': [],
+    'E': [('D', 6)],
+    'D': [('G', 1)],
+}
+
+# Run the algorithm
+astaralgo('A', 'G')
+
+<===========================================================================================================================================================================================================================================================================================================>
+
+# exp 3: Implement Greedy algorithm for any of the following application 
+# - selection sort
+# - minimum spanning tree
+# - single source shortest path problem
+# - job scheduling problem
+# - prims minimal spanning tree algorithm
+# - kruskal minimal spanning tree algo
+# - dijikstra minimal spanning tree algo
+
+sol : # we have used kruskal minimal spanning tree 
+
+
+class Graph:  
+    def __init__(self, vertices):  
+        self.vertices = vertices  
+        self.edges = []  
+        self.adjacency_list = {v: [] for v in vertices}  
+  
+    def add_edge(self, u, v, weight):  
+        self.edges.append((u, v, weight))  
+        self.adjacency_list[u].append((v, weight))  
+        self.adjacency_list[v].append((u, weight))  
+  
+    def find_parent(self, parent, i):  
+        if parent[i] == i:  
+            return i  
+        return self.find_parent(parent, parent[i])  
+  
+    def union(self, parent, rank, x, y):  
+        root_x = self.find_parent(parent, x)  
+        root_y = self.find_parent(parent, y)  
+        
+        if rank[root_x] < rank[root_y]:  
+            parent[root_x] = root_y  
+        elif rank[root_x] > rank[root_y]:  
+            parent[root_y] = root_x  
+        else:  
+            parent[root_y] = root_x  
+            rank[root_x] += 1  
+  
+    def kruskal(self):  
+        minimum_spanning_tree = set()  
+        parent = {}  
+        rank = {}  
+        
+        for v in self.vertices:  
+            parent[v] = v  
+            rank[v] = 0  
+        
+        sorted_edges = sorted(self.edges, key=lambda x: x[2])  # Sort edges by weight
+        
+        for edge in sorted_edges:  
+            u, v, weight = edge  
+            root_u = self.find_parent(parent, u)  
+            root_v = self.find_parent(parent, v)  
+            
+            if root_u != root_v:  
+                minimum_spanning_tree.add(edge)  # Add edge to MST
+                self.union(parent, rank, root_u, root_v)  # Union of sets
+        
+        return minimum_spanning_tree  # Return the minimum spanning tree
+
+# Define graph vertices
+vertices = [0, 1, 2, 3]  
+
+# Create graph object
+g = Graph(vertices)  
+
+# Add edges to the graph
+g.add_edge(0, 1, 5)  
+g.add_edge(0, 2, 10)  
+g.add_edge(0, 3, 3)  
+g.add_edge(1, 3, 1)  
+g.add_edge(2, 3, 4)  
+
+# Find the minimum spanning tree using Kruskal's algorithm
+minimum_spanning_tree = g.kruskal()  
+
+# Print the edges in the minimum spanning tree
+print(minimum_spanning_tree)
+
+or 
+
+# selectionsort 
+
+def selection_sort(arr):
+    n = len(arr)
+    for i in range(n):
+        min_idx = i
+        for j in range(i+1, n):
+            if arr[j] < arr[min_idx]:
+                min_idx = j
+        arr[i], arr[min_idx] = arr[min_idx], arr[i]
+
+arr = [64, 25, 12, 22, 11]
+selection_sort(arr)
+print("Sorted array:", arr)
