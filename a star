@@ -1,0 +1,80 @@
+exp 2 implement A star algorithm for any game search algorithm
+
+sol:
+
+import heapq
+
+def astaralgo(start_node, stop_node):
+    # Priority queue for open set
+    open_set = []
+    heapq.heappush(open_set, (0, start_node))
+    
+    # Closed set
+    closed_set = set()
+    
+    # Cost from start to each node
+    g = {start_node: 0}
+    
+    # Parent dictionary to reconstruct the path
+    parents = {start_node: None}
+    
+    while open_set:
+        # Get the node with the lowest f(n) = g(n) + h(n)
+        _, n = heapq.heappop(open_set)
+        
+        # If stop node is reached, construct the path
+        if n == stop_node:
+            path = []
+            while n is not None:
+                path.append(n)
+                n = parents[n]
+            path.reverse()
+            print("Path found: {}".format(path))
+            return path
+        
+        # Add n to the closed set
+        closed_set.add(n)
+        
+        # Process each neighbor of n
+        for (m, weight) in get_neighbors(n):
+            if m in closed_set:
+                continue
+            
+            # Calculate tentative g score
+            tentative_g = g[n] + weight
+            
+            if m not in g or tentative_g < g[m]:
+                # Update g and parent
+                g[m] = tentative_g
+                parents[m] = n
+                
+                # Add to open set with priority f(m) = g(m) + h(m)
+                heapq.heappush(open_set, (g[m] + heuristic(m), m))
+    
+    print("Path does not exist!")
+    return None
+
+def get_neighbors(v):
+    return Graph_nodes.get(v, [])
+
+def heuristic(n):
+    H_dist = {
+        'A': 11,
+        'B': 6,
+        'C': 99,
+        'D': 1,
+        'E': 7,
+        'G': 0,
+    }
+    return H_dist.get(n, float('inf'))
+
+Graph_nodes = {
+    'A': [('B', 2), ('E', 3)],
+    'B': [('C', 1), ('G', 9)],
+    'C': [],
+    'E': [('D', 6)],
+    'D': [('G', 1)],
+}
+
+# Run the algorithm
+astaralgo('A', 'G')
