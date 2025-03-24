@@ -1,0 +1,67 @@
+exp 5 : Develop an elementary chatbot for any suitable customer interaction application.
+
+
+import java.util.Scanner;
+import java.util.HashMap;
+
+public class chatbot {
+
+    private HashMap<String, String> responses;
+
+    public chatbot() {
+        // Initialize the responses map with common queries and responses
+        responses = new HashMap<>();
+        responses.put("greet", "Hello! How can I assist you today?");
+        responses.put("hours", "Our business hours are Monday to Friday, 9 AM to 6 PM.");
+        responses.put("return_policy", "You can return items within 30 days of purchase, as long as they are unused and in the original packaging.");
+        responses.put("order_status", "Please provide your order number to check the status.");
+        responses.put("goodbye", "Goodbye! Have a great day!");
+        responses.put("default", "I'm sorry, I didn't understand that. Can you please rephrase?");
+    }
+
+    public void greetUser() {
+        System.out.println(responses.get("greet"));
+    }
+
+    public String handleQuery(String query) {
+        query = query.toLowerCase();
+
+        // Simple if-else checks for matching keywords
+        if (query.contains("hours")) {
+            return responses.get("hours");
+        } else if (query.contains("return") && query.contains("policy")) {
+            return responses.get("return_policy");
+        } else if (query.contains("order") && query.contains("status")) {
+            return responses.get("order_status");
+        } else if (query.contains("goodbye")) {
+            return responses.get("goodbye");
+        } else {
+            return responses.get("default");
+        }
+    }
+
+    public void startChat() {
+        greetUser();
+        Scanner scanner = new Scanner(System.in);
+        
+        while (true) {
+            System.out.print("You: ");
+            String userInput = scanner.nextLine();
+            
+            String response = handleQuery(userInput);
+            System.out.println("Chatbot: " + response);
+            
+            // End conversation when user says goodbye
+            if (userInput.toLowerCase().contains("goodbye")) {
+                break;
+            }
+        }
+        
+        scanner.close();
+    }
+
+    public static void main(String[] args) {
+        chatbot chat = new chatbot();
+        chat.startChat();
+    }
+}
