@@ -1,0 +1,94 @@
+Practical_4-Implement a solution for a Constraint Satisfaction Problem using Branch and Bound and Backtracking for n-queens problem or a graph coloring problem.
+
+import copy
+import random
+
+def take_input():
+    """Accepts the size of the chessboard from the user."""
+    while True:
+        try:
+            n = int(input("Input size of chessboard? n = "))
+            if n <= 3:
+                print("Enter a value greater than or equal to 4")
+                continue
+            return n
+        except ValueError:
+            print("Invalid value entered. Please enter a valid integer.")
+
+def get_board(n):
+    """Returns an empty n x n chessboard."""
+    return [["x"] * n for _ in range(n)]
+
+def print_solution(solutions, n):
+    """Prints one of the solutions randomly."""
+    if not solutions:
+        print("No solutions found.")
+        return
+    
+    solution_index = random.randint(0, len(solutions) - 1)  # Select a random solution
+    print("One of the solutions is:\n")
+    for row in solutions[solution_index]:
+        print(" ".join(row))
+
+def solve(board, col, n):
+    """Uses backtracking to find all solutions."""
+    if col >= n:
+        return
+
+    for i in range(n):
+        if is_safe(board, i, col, n):
+            board[i][col] = "Q"
+            if col == n - 1:
+                add_solution(board)
+            else:
+                solve(board, col + 1, n)  # Recursive call
+            # Backtrack
+            board[i][col] = "x"
+
+def is_safe(board, row, col, n):
+    """Checks if placing a queen at (row, col) is safe."""
+    # Check the left side of the row
+    for j in range(col):
+        if board[row][j] == "Q":
+            return False
+
+    # Check upper diagonal (top-left direction)
+    i, j = row, col
+    while i >= 0 and j >= 0:
+        if board[i][j] == "Q":
+            return False
+        i -= 1
+        j -= 1
+
+    # Check lower diagonal (bottom-left direction)
+    x, y = row, col
+    while x < n and y >= 0:
+        if board[x][y] == "Q":
+            return False
+        x += 1
+        y -= 1
+
+    return True
+
+def add_solution(board):
+    """Saves the current board state to the global list of solutions."""
+    global solutions
+    solutions.append(copy.deepcopy(board))
+
+# Taking size of the chessboard from the user
+n = take_input()
+
+# Create an empty n x n board
+board = get_board(n)
+
+# Initialize an empty list to store solutions
+solutions = []
+
+# Solve the problem using backtracking
+solve(board, 0, n)
+
+# Print a random solution
+print_solution(solutions, n)
+
+# Display the total number of solutions
+print(f"\nTotal number of solutions = {len(solutions)}")
