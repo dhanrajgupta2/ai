@@ -92,7 +92,9 @@ def astaralgo(start, goal):
         
         if node == goal:
             path = []
-            while node: path.append(node); node = parents[node]
+            while node: 
+            path.append(node); 
+            node = parents[node]
             return path[::-1]
 
         closed_set.add(node)
