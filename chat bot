@@ -1,67 +1,60 @@
 exp 5 : Develop an elementary chatbot for any suitable customer interaction application.
 
 
-import java.util.Scanner;
-import java.util.HashMap;
+def greet(bot_name, birth_year):
+    print(f"Hello! My name is {bot_name}.")
+    print(f"I was created in {birth_year}.")
 
-public class chatbot {
+def remind_name():
+    print('Please, remind me your name.')
+    name = input()
+    print(f"What a great name you have, {name}!")
 
-    private HashMap<String, String> responses;
+def guess_age():
+    print('Let me guess your age.')
+    print('Enter remainders of dividing your age by 3, 5, and 7.')
 
-    public chatbot() {
-        // Initialize the responses map with common queries and responses
-        responses = new HashMap<>();
-        responses.put("greet", "Hello! How can I assist you today?");
-        responses.put("hours", "Our business hours are Monday to Friday, 9 AM to 6 PM.");
-        responses.put("return_policy", "You can return items within 30 days of purchase, as long as they are unused and in the original packaging.");
-        responses.put("order_status", "Please provide your order number to check the status.");
-        responses.put("goodbye", "Goodbye! Have a great day!");
-        responses.put("default", "I'm sorry, I didn't understand that. Can you please rephrase?");
-    }
+    rem3 = int(input("Remainder when divided by 3: "))
+    rem5 = int(input("Remainder when divided by 5: "))
+    rem7 = int(input("Remainder when divided by 7: "))
 
-    public void greetUser() {
-        System.out.println(responses.get("greet"));
-    }
+    age = (rem3 * 70 + rem5 * 21 + rem7 * 15) % 105
+    print(f"Your age is {age}; that's a good time to start programming!")
 
-    public String handleQuery(String query) {
-        query = query.toLowerCase();
+def count():
+    print('Now I will prove to you that I can count to any number you want.')
+    
+    num = int(input("Enter a number: "))
+    
+    for counter in range(num + 1):
+        print(f"{counter} !")
 
-        // Simple if-else checks for matching keywords
-        if (query.contains("hours")) {
-            return responses.get("hours");
-        } else if (query.contains("return") && query.contains("policy")) {
-            return responses.get("return_policy");
-        } else if (query.contains("order") && query.contains("status")) {
-            return responses.get("order_status");
-        } else if (query.contains("goodbye")) {
-            return responses.get("goodbye");
-        } else {
-            return responses.get("default");
-        }
-    }
+def test():
+    print("Let's test your programming knowledge.")
+    print("Why do we use methods?")
+    print("1. To repeat a statement multiple times.")
+    print("2. To decompose a program into several small subroutines.")
+    print("3. To determine the execution time of a program.")
+    print("4. To interrupt the execution of a program.")
 
-    public void startChat() {
-        greetUser();
-        Scanner scanner = new Scanner(System.in);
-        
-        while (true) {
-            System.out.print("You: ");
-            String userInput = scanner.nextLine();
-            
-            String response = handleQuery(userInput);
-            System.out.println("Chatbot: " + response);
-            
-            // End conversation when user says goodbye
-            if (userInput.toLowerCase().contains("goodbye")) {
-                break;
-            }
-        }
-        
-        scanner.close();
-    }
+    correct_answer = 2
+    while True:
+        guess = int(input("Enter your choice: "))
+        if guess == correct_answer:
+            break
+        print("Please, try again.")
 
-    public static void main(String[] args) {
-        chatbot chat = new chatbot();
-        chat.startChat();
-    }
-}
+    print('Completed, have a nice day!')
+
+def end():
+    print('Congratulations, have a nice day!')
+    input("Press Enter to exit...")
+
+# Run the chatbot
+greet('Pratiksha', '2024')  # Change name and year as needed
+remind_name()
+guess_age()
+count()
+test()
+end()
+
