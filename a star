@@ -97,11 +97,11 @@ def astar(start, goal):
             node = parents[node]
             return path[::-1]
 
-        for neighbor, weight in Graph.get(node, []):
-            new_g = g[node] + weight
-            if new_g < g.get(neighbor, float('inf')):
-                g[neighbor], parents[neighbor] = new_g, node
-                heapq.heappush(open_set, (new_g + heuristic(neighbor), neighbor))
+        for n, w in Graph.get(node, []): 
+            new_g = g[node] + w 
+            if new_g < g.get(n, float('inf')): 
+                g[n], parents[n] = new_g, node 
+                heapq.heappush(open_set, (new_g + heuristic(n), n))
 
     return None  # No path found
 
