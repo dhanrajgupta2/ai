@@ -84,12 +84,11 @@ or
 
 import heapq
 
-def astaralgo(start, goal):
-    open_set, closed_set, g, parents = [(0, start)], set(), {start: 0}, {start: None}
+def astar(start, goal):
+    open_set, g, parents = [(0, start)], {start: 0}, {start: None}
 
     while open_set:
-        _, node = heapq.heappop(open_set)  # Get the node with the lowest f(n)
-        
+        _, node = heapq.heappop(open_set)
         if node == goal:
             path = []
             while node: 
@@ -97,22 +96,17 @@ def astaralgo(start, goal):
             node = parents[node]
             return path[::-1]
 
-        closed_set.add(node)
-
-        for neighbor, weight in Graph_nodes.get(node, []):
-            if neighbor in closed_set: continue
-            
+        for neighbor, weight in Graph.get(node, []):
             new_g = g[node] + weight
             if new_g < g.get(neighbor, float('inf')):
                 g[neighbor], parents[neighbor] = new_g, node
                 heapq.heappush(open_set, (new_g + heuristic(neighbor), neighbor))
 
-    return None  # If no path is found
+    return None  # No path found
 
-# Example graph and heuristic function
-heuristic = lambda n: {'A': 11, 'B': 6, 'C': 99, 'D': 1, 'E': 7, 'G': 0}.get(n, float('inf'))
-Graph_nodes = {'A': [('B', 2), ('E', 3)], 'B': [('C', 1), ('G', 9)], 'C': [], 'E': [('D', 6)], 'D': [('G', 1)]}
+heuristic = lambda n: {'A': 11, 'B': 6, 'C': 99, 'D': 1, 'E': 7, 'G': 0}.get(n, 0)
+Graph = {'A': [('B', 2), ('E', 3)], 'B': [('C', 1), ('G', 9)], 'C': [], 'E': [('D', 6)], 'D': [('G', 1)]}
 
-# Run the algorithm
-print(astaralgo('A', 'G'))
+print(astar('A', 'G'))
+
 
