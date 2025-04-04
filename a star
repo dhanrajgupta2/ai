@@ -89,7 +89,8 @@ def astar(start, goal):
 
     while open_set:
         _, node = heapq.heappop(open_set)
-        if node == goal:
+        
+            if node == goal:
             path = []
             while node: 
             path.append(node); 
