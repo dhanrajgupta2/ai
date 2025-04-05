@@ -79,6 +79,51 @@ minimum_spanning_tree = g.kruskal()
 # Print the edges in the minimum spanning tree
 print(minimum_spanning_tree)
 
+or
+
+class Graph:
+    def __init__(self, vertices):
+        self.vertices = vertices
+        self.edges = []
+
+    def add_edge(self, u, v, w):
+        self.edges.append((u, v, w))
+
+    def find(self, parent, i):
+        if parent[i] != i:
+            parent[i] = self.find(parent, parent[i])
+        return parent[i]
+
+    def union(self, parent, rank, x, y):
+        if rank[x] < rank[y]:
+            parent[x] = y
+        elif rank[x] > rank[y]:
+            parent[y] = x
+        else:
+            parent[y] = x
+            rank[x] += 1
+
+    def kruskal(self):
+        parent = {v: v for v in self.vertices}
+        rank = {v: 0 for v in self.vertices}
+        mst = set()
+
+        for u, v, w in sorted(self.edges, key=lambda x: x[2]):
+            x, y = self.find(parent, u), self.find(parent, v)
+            if x != y:
+                mst.add((u, v, w))
+                self.union(parent, rank, x, y)
+        return mst
+
+# Usage
+g = Graph([0, 1, 2, 3])
+for u, v, w in [(0,1,5), (0,2,10), (0,3,3), (1,3,1), (2,3,4)]:
+    g.add_edge(u, v, w)
+
+print(g.kruskal())
+
+
+
 or 
 
 # selectionsort 
