@@ -92,3 +92,28 @@ print_solution(solutions, n)
 
 # Display the total number of solutions
 print(f"\nTotal number of solutions = {len(solutions)}")
+
+
+or
+
+
+N = 8
+board = [-1] * N
+
+def is_safe(row, col):
+    for i in range(row):
+        if board[i] == col or abs(board[i] - col) == abs(i - row):
+            return False
+    return True
+
+def solve(row=0):
+    if row == N:
+        print(board)
+        return
+    for col in range(N):
+        if is_safe(row, col):
+            board[row] = col
+            solve(row + 1)
+            board[row] = -1
+
+solve()
